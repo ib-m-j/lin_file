@@ -2,6 +2,10 @@ import cards
 import random
 import bri
 import os.path
+import argparse
+import glob
+import datetime
+import sys
 
 def getCard(briValue):
     return  cards.allCards[briValue]
@@ -50,7 +54,8 @@ halfTableBreakBoard = 'qx|o{}|md|3SHDAKQJT98765432C,SHDCAKQJT98765432,SAKQJT9876
 halfTableInterval = 4
 halTableStartBoard = 101
 
-if __name__== '__main__':
+
+def makeLinFile():
     myBriFile = open(inputFileName,'rb')
     myLinFile = open(outputFileName,'w')
     allDeals = bri.getAllDeals(myBriFile)
@@ -79,3 +84,57 @@ if __name__== '__main__':
     myBriFile.close()
     myLinFile.close()
 
+def getFilenameDate(fileName):
+    datePart = os.path.splitext(os.path.split(fileName)[1])[0]
+    components = datePart.split('-')
+    return datetime.date(
+        int(components[2]),int(components[1]),int(components[0]))
+    print(datePart)
+
+
+def getBestFile(possibleFiles):
+    today = datetime.date.today()
+    foundDate = None
+    foundFile = None
+    for f in possibleFiles:
+        date = getFilenameDate(f)
+        print('testing date', date)
+        if date <= today:
+            print('here')
+            if not(foundDate):
+                print('morehere')
+                foundDate = date
+                foundFile = f
+            else:
+                if date > foundDate:
+                    foundDate = date
+                    foundFile = f
+    return foundFile
+            
+
+def parseArguments():
+    parser = argparse.ArgumentParser('make lin file')
+    #parser.add_argument('input_deal_file', type=str)
+    parser.add_argument('deals_per_round', type=int)
+    args = parser.parse_args()
+    print(args)
+    
+    possibleFiles = glob.glob(os.path.join(inputFolder,'*.bri'))
+    print(possibleFiles)
+    res = getBestFile(possibleFiles)
+    print('work with file:', res)
+    print('set roun d length to:',args[0]) 
+
+
+
+def run():
+    roundLength = sys.argv[1]
+    possibleFiles = glob.glob(os.path.join(inputFolder,'*.bri'))
+    print(possibleFiles)
+    res = getBestFile(possibleFiles)
+    print('work with file:', res)
+    print('set roun d length to:', roundLength) 
+
+if __name__== '__main__':
+    run()
+    #makeLinFile()
