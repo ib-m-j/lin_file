@@ -44,7 +44,8 @@ class LinDeal:
         return res
 
 
-inputFolder = os.path.join('.','input')
+#inputFolder = os.path.join('.','input')
+inputFolder = os.path.join('C:\\','users','ibmjo','github','lin_file','input')
 outputFolder = os.path.join('.','output')
 inputBaseName = '29-08-2023.bri'
 resultBaseName = inputBaseName.replace('bri', 'lin')
