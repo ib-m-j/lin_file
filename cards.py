@@ -123,7 +123,7 @@ class Deal:
             remainingCards = set(allCards).difference(set(usedCards))
             self.addHand(
                 errorSeats[0], Hand(list(remainingCards)))
-        print('Adding {} cards to seat {}'.format(52 - 39, errorSeats[0]))
+        #print('Adding {} cards to seat {}'.format(52 - 39, errorSeats[0]))
 
 
     def makeLinString(self):
