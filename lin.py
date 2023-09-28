@@ -45,20 +45,22 @@ class LinDeal:
 
 
 #inputFolder = os.path.join('.','input')
-inputFolder = os.path.join('C:\\','users','ibmjo','github','lin_file','input')
-outputFolder = os.path.join('.','output')
-inputBaseName = '29-08-2023.bri'
-resultBaseName = inputBaseName.replace('bri', 'lin')
-inputFileName = os.path.join(inputFolder, inputBaseName)
-outputFileName = os.path.join(outputFolder, resultBaseName)
+inputFolder = os.path.join('C:\\','BC3','kortfordelinger')
+outputFolder = os.path.join('C:\\','bbokort')
+#inputBaseName = '29-08-2023.bri'
+#resultBaseName = inputBaseName.replace('bri', 'lin')
+#inputFileName = os.path.join(inputFolder, inputBaseName)
+#outputFileName = os.path.join(outputFolder, resultBaseName)
+
 halfTableBreakBoard = 'qx|o{}|md|3SHDAKQJT98765432C,SHDCAKQJT98765432,SAKQJT98765432HDC,SHAKQJT98765432DC|rh||ah|Board {}|sv|0|pg||\n'
 #halfTableInterval = 4
 halTableStartBoard = 101
 
 
-def makeLinFile(filename, halfTableInterval):
+def makeLinFile(inputFileName, halfTableInterval, outputFileName):
     myBriFile = open(inputFileName,'rb')
     myLinFile = open(outputFileName,'w')
+
     allDeals = bri.getAllDeals(myBriFile)
 
     #print('halftable', halfTableBreakBoard)
@@ -74,7 +76,6 @@ def makeLinFile(filename, halfTableInterval):
         linText = linText + linLine + '\n'
         dealNo = dealNo + 1
     
-    print("Writing to ", outputFileName)
     lastBreakNo = (dealNo // halfTableInterval) + 101
 
     linText = linText + halfTableBreakBoard.format(lastBreakNo, lastBreakNo)
@@ -99,7 +100,7 @@ def getBestFile(possibleFiles):
     foundFile = None
     for f in possibleFiles:
         date = getFilenameDate(f)
-        print('testing date', date)
+        #print('testing date', date)
         if date <= today:
             if not(foundDate):
                 foundDate = date
@@ -108,6 +109,10 @@ def getBestFile(possibleFiles):
                 if date > foundDate:
                     foundDate = date
                     foundFile = f
+
+    if foundDate != today:
+        print("\nWarning nit using todays file")
+
     return foundFile
             
 
@@ -115,15 +120,20 @@ def parseArguments():
     parser = argparse.ArgumentParser('make lin file')
     #parser.add_argument('input_deal_file', type=str)
     parser.add_argument('deals_per_round', type=int)
-    args = parser.parse_args()
-    print("args are ", args)
+    parser.add_argument('-t', action='store_true')
     
+    args = parser.parse_args()
+    #print("args are ", args)
+
+    return args.deals_per_round
+
+
+def setFiles():
     possibleFiles = glob.glob(os.path.join(inputFolder,'*.bri'))
-    print(possibleFiles)
-    res = getBestFile(possibleFiles)
-    print('\nWork with file:', res)
-    print('Set half table interval to',args.deals_per_round) 
-    return res, args.deals_per_round
+    #print(possibleFiles)
+    input = getBestFile(possibleFiles)
+    output = os.path.join(outputFolder, os.path.basename(input).replace('bri', 'lin'))
+    return input, output
 
 
 def runold():
@@ -135,8 +145,12 @@ def runold():
     print('set roun d length to:', roundLength) 
 
 def run():
-    f, rounds = parseArguments()
-    makeLinFile(f, rounds)
+    rounds = parseArguments()
+    input, output = setFiles()
+    print('\nInputfile:', input)
+    print('Óutputfile', output)
+    print('Set half table interval to',rounds) 
+    makeLinFile(input, rounds, output)
 
 
 if __name__== '__main__':
