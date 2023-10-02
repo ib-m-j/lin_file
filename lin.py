@@ -99,19 +99,24 @@ def getBestFile(possibleFiles):
     foundDate = None
     foundFile = None
     for f in possibleFiles:
-        date = getFilenameDate(f)
-        #print('testing date', date)
-        if date <= today:
-            if not(foundDate):
-                foundDate = date
-                foundFile = f
-            else:
-                if date > foundDate:
+        #print("trying file", f)
+        try:
+            date = getFilenameDate(f)
+        except:
+            pass
+        else:
+            #print('testing date', date)
+            if date <= today:
+                if not(foundDate):
                     foundDate = date
                     foundFile = f
+                else:
+                    if date > foundDate:
+                        foundDate = date
+                        foundFile = f
 
     if foundDate != today:
-        print("\nWarning nit using todays file")
+        print("\nWarning not using todays file")
 
     return foundFile
             

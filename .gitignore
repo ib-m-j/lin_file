@@ -2,3 +2,4 @@ output
 lin.spec
 dist
 build
+__pycache*
