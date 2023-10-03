@@ -1,3 +1,3 @@
 pyinstaller lin.py -F
-cp dist/lin.exe g:/'my drive'/bridge/bboelementer
+cp dist/lin.exe g:/'my drive'/bridge/bboelementer/bbofiler.exe
 

@@ -133,11 +133,12 @@ def parseArguments():
     return args.deals_per_round
 
 
-def setFiles():
+def setFiles(rounds):
     possibleFiles = glob.glob(os.path.join(inputFolder,'*.bri'))
     #print(possibleFiles)
     input = getBestFile(possibleFiles)
-    output = os.path.join(outputFolder, os.path.basename(input).replace('bri', 'lin'))
+    output = os.path.join(outputFolder, 
+                          os.path.basename(input).replace('.bri', '_{}.lin'.format(rounds)))
     return input, output
 
 
@@ -151,10 +152,11 @@ def runold():
 
 def run():
     rounds = parseArguments()
-    input, output = setFiles()
+    input, output = setFiles(rounds)
     print('\nInputfile:', input)
-    print('Óutputfile', output)
+    print('Outputfile', output)
     print('Set half table interval to',rounds) 
+    sys.exit(0)                    
     makeLinFile(input, rounds, output)
 
 
