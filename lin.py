@@ -156,7 +156,6 @@ def run():
     print('\nInputfile:', input)
     print('Outputfile', output)
     print('Set half table interval to',rounds) 
-    sys.exit(0)                    
     makeLinFile(input, rounds, output)
 
 
